@@ -157,6 +157,10 @@ func (c *criService) PullImage(ctx context.Context, r *runtime.PullImageRequest)
 		tracing.Attribute("snapshotter.name", snapshotter),
 	)
 
+	if snapshotter == CustomSnapshotterName {
+		return c.customPullImage(ctx, ref)
+	}
+
 	labels := c.getLabels(ctx, ref)
 
 	pullOpts := []containerd.RemoteOpt{
